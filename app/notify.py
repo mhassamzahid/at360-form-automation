@@ -5,6 +5,7 @@ from pathlib import Path
 
 from . import config
 from .mailer import lead_confirmation, lead_notification, send_email
+from .slack import post_lead
 
 log = logging.getLogger("notify")
 
@@ -29,6 +30,12 @@ async def handle_new_lead(lead: dict, fields: dict[str, str]) -> None:
             log.error("Failed to send team notification for lead %s: %s", lead.get("id"), exc)
     else:
         log.warning("NOTIFY_EMAILS is empty; no team notification sent")
+
+    if config.SLACK_WEBHOOK_URL:
+        try:
+            await post_lead(lead, fields)
+        except Exception as exc:
+            log.error("Failed to post lead %s to Slack: %s", lead.get("id"), exc)
 
     if config.SEND_LEAD_CONFIRMATION and lead_email:
         try:

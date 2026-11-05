@@ -36,3 +36,6 @@ NOTIFY_EMAILS = [e.strip() for e in _env("NOTIFY_EMAILS", "TO_EMAILS").split(","
 # Also email the person who filled the form?
 SEND_LEAD_CONFIRMATION = _env("SEND_LEAD_CONFIRMATION", default="false").lower() in ("1", "true", "yes")
 LEAD_CONFIRMATION_SUBJECT = _env("LEAD_CONFIRMATION_SUBJECT", default="Thanks, we've received your details")
+
+# Slack incoming webhook for the sales channel. Empty = Slack disabled.
+SLACK_WEBHOOK_URL = _env("SLACK_WEBHOOK_URL")
